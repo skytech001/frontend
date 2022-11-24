@@ -1,13 +1,138 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+
+
+html {
+  font-size: 62.5%;
+  /*by default fontsize is 16px. so 16px * 62.5 = 10px. 10px = 1rem.*/
+  box-sizing: border-box;
+  /*this makes it easier to manage margins paddingss and border*/
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  margin: 0;
+  height: 100vh;
+  /*vh = viewport height*/
+  font-size: 1.6rem;
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#root{
+  height: 100%;
+}
+
+/*layout*/
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'header'
+    'main'
+    'footer';
+  grid-template-columns: 1fr;
+  grid-template-rows: 5rem 1fr 5rem;
+  height: 100%;
+}
+
+header {
+  grid-area: header;
+  /* this connects this to the gird template area above called header*/
+  background-color: #203040;
+}
+
+main {
+  grid-area: main;
+  padding: 1rem;
+}
+
+footer {
+  grid-area: footer;
+  background-color: #203040;
+  color: #ffffff;
+}
+
+.row {
+  /*this makes the header flex to seperate logo from signin and cart*/
+  display: flex;
+  flex-wrap: wrap;
+  /*this makes flex responsive*/
+  justify-content: space-between;
+  /*create maximum distance between items*/
+  align-items: center;
+  /*center items vertically*/
+}
+
+/*common*/
+h1 {
+  font-size: 1.8rem;
+  padding: 1rem 0;
+}
+
+h2 {
+  font-size: 1.6rem;
+  padding: 1rem 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  color: #ff8000;
+}
+
+header a {
+  /*this means all links inside header*/
+  color: #ffffff;
+  padding: 1rem;
+}
+
+a.brand {
+  /*this means a that has class of brand*/
+  color: #ffffff;
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.row.center {
+  /*center is a subclass to row. it items that contain both classes*/
+  justify-content: center;
+  /*centers item vertically and horizontally*/
+}
+
+img {
+  border-radius: 0.5rem;
+}
+
+img.medium {
+  max-width: 29rem;
+  width: 100%;
+}
+
+/*card*/
+
+.card {
+  border: 0.1rem #c0c0c0 solid;
+  background-color: #f8f8f8;
+  border-radius: 0.5rem;
+  margin: 1rem;
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+.card-body>* {
+  /*all child/all element inside card-body*/
+  margin-bottom: 0.5rem;
+}
+
+.price {
+  font-size: 2rem;
+}
+
+/*rating*/
+.rating span {
+  /*all spans inside rating*/
+  color: #f0c040;
+  margin: 0.1rem;
 }
