@@ -9,7 +9,6 @@ import { saveShippingAddress } from "../features/shippingSlice";
 const ShippingAddressScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isSignedIn } = useSelector((state) => state.signin);
   const fulladdress = localStorage.getItem("shippingAddress")
     ? JSON.parse(localStorage.getItem("shippingAddress"))
     : {};
