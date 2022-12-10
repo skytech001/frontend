@@ -61,6 +61,29 @@ footer {
   /*center items vertically*/
 }
 
+.row.center {
+  /*center is a subclass to row. it items that contain both classes*/
+  justify-content: center;
+  /*centers item vertically and horizontally*/
+}
+
+.row.top{
+  align-items: flex-start;
+}
+
+.col-1{
+  flex: 1 1 25rem; /*the first 1 means to occupy 1 of 4 and the second one means to make it shrinkable.*/
+}
+
+.col-2 {
+  flex: 2 1 50rem;
+}
+
+.min-30 {
+  min-width: 30rem;
+}
+
+
 /*common*/
 h1 {
   font-size: 1.8rem;
@@ -80,6 +103,49 @@ a:hover {
   color: #ff8000;
 }
 
+ul{
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+li{
+  margin-top: 1rem;
+}
+
+input,
+select, 
+textarea,
+button{
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 0.1rem #a4a4a4 solid;
+  font-size: 1.6rem;
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  background-color: #f8f8f8;
+    cursor: pointer;
+}
+
+button.primary{
+  background-color: #f0c040; 
+}
+
+button.block{
+  width: 100%;
+}
+
+input:hover
+select:hover
+textarea:hover
+button:hover{
+  border: 0.1rem #404040 solid;
+}
+
 header a {
   /*this means all links inside header*/
   color: #ffffff;
@@ -93,19 +159,31 @@ a.brand {
   font-weight: bold;
 }
 
-.row.center {
-  /*center is a subclass to row. it items that contain both classes*/
-  justify-content: center;
-  /*centers item vertically and horizontally*/
+.badge {
+  background-color: #f02020;
+  color: #ffffff;
+  border-radius: 50%;
+  padding: 0.2rem 0.7rem;
+  font-size: 1.4rem;
+  margin-left: 0.2rem;
 }
 
 img {
   border-radius: 0.5rem;
 }
 
+img.small {
+  max-width: 5rem;
+  width: 100%;
+}
+
 img.medium {
   max-width: 29rem;
   width: 100%;
+}
+
+img.large{
+  width: 100%; /*the impact of this line is to make the image responsive on smaller devices*/
 }
 
 /*card*/
@@ -135,4 +213,86 @@ img.medium {
   /*all spans inside rating*/
   color: #f0c040;
   margin: 0.1rem;
+}
+
+.rating span:last-child{
+  color: #404040
+}
+
+.loading{
+  display: block !important;
+}
+.success{
+  color: #20a020
+}
+
+.danger {
+  color: #a02020
+}
+
+.alert{
+  padding: 1rem;
+  border: 0.1rem solid transparent;
+  border-radius: 0.5rem;
+}
+
+.alert-info{
+  color: #2020a0;
+  background-color: #e0e0ff;
+}
+
+.alert-danger {
+  color: #a02020;
+  background-color: #ffe0e0e0;
+}
+
+.form {
+  max-width: 60rem;
+  margin: 0 auto;
+}
+
+.form > div {/*for direct div of forms*/
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+
+.form label {
+  margin: 1rem 0;
+  display: block;
+}
+
+.dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.dropdown-content {
+  position: absolute;
+  display: none;
+  right: 0;
+  min-width: 12rem; 
+  padding: 1rem;
+  z-index: 1;
+  background-color: #203040;
+  margin: 0;
+  margin-top: 0.4rem;
+  border-radius: 0.5rem;
+}
+
+.dropdown:hover .dropdown-content {/* if mouse over dropdown, the set dropdown-content to block display */
+  display: block;
+}
+
+.checkout-steps > div {
+  border-top: 0.3rem #c0c0c0 solid;
+  color: #c0c0c0;
+  flex: 1;
+  padding: 1rem;
+  font-weight: bold;
+}
+
+.checkout-steps > div.active {/* for direct div that are active*/
+  border-top-color: #f08000 ;
+  color: #f08000;
 }
