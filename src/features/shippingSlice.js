@@ -3,11 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 const shippingSlice = createSlice({
   name: "shipping",
   initialState: {
-    adrress: {},
+    address: {},
   },
   reducers: {
     saveShippingAddress: (state, { payload }) => {
-      state.adrress = payload;
+      state.address = payload;
       localStorage.setItem("shippingAddress", JSON.stringify(payload));
     },
   },

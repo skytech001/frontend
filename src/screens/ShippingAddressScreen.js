@@ -7,6 +7,7 @@ import CheckOutSteps from "../components/CheckOutSteps";
 import { saveShippingAddress } from "../features/shippingSlice";
 
 const ShippingAddressScreen = () => {
+  const { cartItems } = useSelector((state) => state.addToCart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const fulladdress = localStorage.getItem("shippingAddress")
@@ -19,6 +20,12 @@ const ShippingAddressScreen = () => {
   const [state, setState] = useState(fulladdress.state);
   const [postalCode, setPostalCode] = useState(fulladdress.postalCode);
   const [country, setCountry] = useState(fulladdress.country);
+
+  useEffect(() => {
+    if (cartItems.length === 0) {
+      navigate("/");
+    }
+  });
 
   const submitHandler = (event) => {
     event.preventDefault();

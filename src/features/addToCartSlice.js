@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
 import axios from "axios";
 
 export const addItemToCart = createAsyncThunk(
@@ -30,6 +29,9 @@ const addToCartSlice = createSlice({
       );
       state.cartItems = newItems;
     },
+    cartEmpty: (state) => {
+      state.cartItems = [];
+    },
   },
   extraReducers(builder) {
     builder.addCase(addItemToCart.fulfilled, (state, action) => {
@@ -53,4 +55,4 @@ const addToCartSlice = createSlice({
 });
 
 export default addToCartSlice.reducer;
-export const { removeItem } = addToCartSlice.actions;
+export const { removeItem, cartEmpty } = addToCartSlice.actions;

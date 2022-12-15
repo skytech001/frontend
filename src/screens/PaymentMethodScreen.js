@@ -1,14 +1,23 @@
 import React from "react";
+import { useEffect } from "react";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CheckOutSteps from "../components/CheckOutSteps";
+import { savePaymentMethod } from "../features/paymentSlice";
 
 const PaymentMethodScreen = () => {
+  const { address } = useSelector((state) => state.shipping);
   const [paymentMethod, setPaymentMethod] = useState("paypal");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!address.address) {
+      navigate("/shipping");
+    }
+  });
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -20,7 +29,7 @@ const PaymentMethodScreen = () => {
       <CheckOutSteps step1 step2 step3></CheckOutSteps>
       <form className="form" onSubmit={submitHandler}>
         <div>
-          <h1>Payment</h1>
+          <h1>Payment Method</h1>
         </div>
         <div>
           <div>
@@ -30,7 +39,6 @@ const PaymentMethodScreen = () => {
               value="paypal"
               name="paymentMethod"
               required
-              checked
               onChange={(event) => setPaymentMethod(event.target.value)}
             ></input>
             <label htmlFor="paypal">PayPal</label>
@@ -45,7 +53,6 @@ const PaymentMethodScreen = () => {
               value="stripe"
               name="paymentMethod"
               required
-              checked
               onChange={(event) => setPaymentMethod(event.target.value)}
             ></input>
             <label htmlFor="stripe">Stripe</label>

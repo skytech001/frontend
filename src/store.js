@@ -5,6 +5,9 @@ import addToCartReducer from "./features/addToCartSlice";
 import signinReducer from "./features/signinSlice";
 import registerReducer from "./features/registerSlice";
 import shippingReducer from "./features/shippingSlice";
+import paymentReducer from "./features/paymentSlice";
+import orderReducer from "./features/placeOrderSlice";
+import detailOrderReducer from "./features/orderSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +17,9 @@ const store = configureStore({
     signin: signinReducer,
     register: registerReducer,
     shipping: shippingReducer,
+    payment: paymentReducer,
+    order: orderReducer,
+    detailOrder: detailOrderReducer,
   },
 });
 

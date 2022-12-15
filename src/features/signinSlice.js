@@ -31,6 +31,7 @@ const signinSlice = createSlice({
       state.userLoading = false;
       state.userInfo = {};
       state.isSignedIn = false;
+      localStorage.removeItem("shippingAddress");
     },
   },
   extraReducers(builder) {
