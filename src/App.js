@@ -6,22 +6,22 @@ import { useDispatch, useSelector } from "react-redux";
 import SigninScreen from "./screens/SigninScreen";
 import { userSignout } from "./features/signinSlice";
 import RegisterScreen from "./screens/RegisterScreen";
-import { newuserSignout } from "./features/registerSlice";
 import ShippingAddressScreen from "./screens/ShippingAddressScreen";
 import PaymentMethodScreen from "./screens/PaymentMethodScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen";
+import ProfileScreen from "./screens/ProfileScreen";
+import OrderHistoryScreen from "./screens/OrderHistoryScreen";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   const { cartItems } = useSelector((state) => state.addToCart);
   const { userInfo, isSignedIn } = useSelector((state) => state.signin);
-  const { newuserInfo, isRegistered } = useSelector((state) => state.register);
 
   const dispatch = useDispatch();
 
   const signoutHandler = () => {
     dispatch(userSignout());
-    dispatch(newuserSignout());
   };
 
   return (
@@ -40,20 +40,50 @@ function App() {
                 <span className="badge">{cartItems.length}</span>
               )}
             </Link>
-            {isSignedIn || isRegistered ? (
+            {userInfo.name ? (
               <div className="dropdown">
                 <Link to="#">
-                  {isSignedIn ? `${userInfo.name} ` : `${newuserInfo.name} `}
-                  <i className="fa fa-caret-down"></i>{" "}
+                  {isSignedIn && `${userInfo.name}`}{" "}
+                  <i className="fa fa-caret-down"></i>
                 </Link>
                 <ul className="dropdown-content">
-                  <Link to="#signout" onClick={signoutHandler}>
-                    Sign Out
-                  </Link>
+                  <li>
+                    <Link to="/profile">User Profile</Link>
+                  </li>
+                  <li>
+                    <Link to="/orderhistory">My Orders</Link>
+                  </li>
+                  <li>
+                    <Link to="#signout" onClick={signoutHandler}>
+                      Sign Out
+                    </Link>
+                  </li>
                 </ul>
               </div>
             ) : (
               <Link to="/signin">Sign In</Link>
+            )}
+            {userInfo && userInfo.isAdmin && (
+              <div className="dropdown">
+                <Link to="#admin">
+                  {" "}
+                  Admin <i className="fa fa-caret-down"></i>
+                </Link>
+                <ul className="dropdown-content">
+                  <li>
+                    <Link to="/dashboard">Dashboard</Link>
+                  </li>
+                  <li>
+                    <Link to="/productlist">Products</Link>
+                  </li>
+                  <li>
+                    <Link to="/orderlist">Orders</Link>
+                  </li>
+                  <li>
+                    <Link to="/userslist">Users</Link>
+                  </li>
+                </ul>
+              </div>
             )}
           </div>
         </header>
@@ -63,11 +93,21 @@ function App() {
             <Route path="/cart" element={<CartScreen />}></Route>
             <Route path="/product/:id" element={<ProductScreen />}></Route>
             <Route path="/signin" element={<SigninScreen />}></Route>
+
             <Route path="/register" element={<RegisterScreen />}></Route>
             <Route path="/shipping" element={<ShippingAddressScreen />}></Route>
             <Route path="/payment" element={<PaymentMethodScreen />}></Route>
             <Route path="/placeorder" element={<PlaceOrderScreen />}></Route>
-            <Route path="/order/:id" element={<OrderScreen />}></Route>
+
+            <Route element={<PrivateRoute user={userInfo} />}>
+              <Route path="/profile" element={<ProfileScreen />}></Route>
+              <Route path="/order/:id" element={<OrderScreen />}></Route>
+              <Route
+                path="orderhistory"
+                element={<OrderHistoryScreen />}
+              ></Route>
+            </Route>
+
             <Route path="/" element={<HomeScreen />} exact></Route>
           </Routes>
         </main>

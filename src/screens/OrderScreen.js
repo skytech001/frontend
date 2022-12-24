@@ -1,31 +1,31 @@
 import React from "react";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
-import { orderDetails } from "../features/orderSlice";
 
 const OrderScreen = () => {
-  const dispatch = useDispatch();
-  const params = useParams();
-  const orderId = params.id;
-
-  useEffect(() => {
-    dispatch(orderDetails(orderId));
-  }, [dispatch, orderId]);
-
-  const { detailedOrder, detailLoading, detailError } = useSelector(
-    (state) => state.detailOrder
+  const { thisOrder, orderLoading, orderError } = useSelector(
+    (state) => state.order
   );
+  const { isSignedIn } = useSelector((state) => state.signin);
+  const { currentOrder } = useSelector((state) => state.orderList);
+  const displayOrder = thisOrder ? thisOrder : currentOrder[0];
+  const navigate = useNavigate();
 
-  return detailLoading ? (
+  return orderLoading ? (
     <LoadingBox></LoadingBox>
-  ) : detailError ? (
-    <MessageBox variant="danger"></MessageBox>
+  ) : orderError ? (
+    <MessageBox variant="danger">{orderError}</MessageBox>
   ) : (
     <div>
-      {/* <h1>Order {detailedOrder._id}</h1> */}
+      {thisOrder && (
+        <MessageBox>
+          <h1>Thanks For Shopping With Us</h1>
+        </MessageBox>
+      )}
+      <h1>Order {displayOrder._id}</h1>
       <div className="row top">
         <div className="col-2">
           <ul>
@@ -34,17 +34,17 @@ const OrderScreen = () => {
                 <h2>Shipping</h2>
                 <p>
                   <strong>Name: </strong>{" "}
-                  {detailedOrder.shippingAddress.fullName} <br />
+                  {displayOrder.shippingAddress.fullName} <br />
                   <strong>Address: </strong>
-                  {detailedOrder.shippingAddress.address},{" "}
-                  {detailedOrder.shippingAddress.city},{" "}
-                  {detailedOrder.shippingAddress.state},{" "}
-                  {detailedOrder.shippingAddress.postalCode},{" "}
-                  {detailedOrder.shippingAddress.country}
+                  {displayOrder.shippingAddress.address},{" "}
+                  {displayOrder.shippingAddress.city}
+                  {displayOrder.shippingAddress.state},{" "}
+                  {displayOrder.shippingAddress.postalCode},{" "}
+                  {displayOrder.shippingAddress.country}
                 </p>
-                {detailedOrder.isDelivered ? (
+                {displayOrder.isDelivered ? (
                   <MessageBox variant="success">
-                    {detailedOrder.deliveredAt}
+                    {displayOrder.deliveredAt}
                   </MessageBox>
                 ) : (
                   <MessageBox variant="danger">Not Deliverd</MessageBox>
@@ -56,11 +56,11 @@ const OrderScreen = () => {
               <div className="card card-body">
                 <h2>Payment</h2>
                 <p>
-                  <strong>Method:</strong> {detailedOrder.paymentMethod}
+                  <strong>Method:</strong> {displayOrder.paymentMethod}
                 </p>
-                {detailedOrder.isPaid ? (
+                {displayOrder.isPaid ? (
                   <MessageBox variant="success">
-                    Paid at {detailedOrder.paidAt}
+                    Paid at {displayOrder.paidAt}
                   </MessageBox>
                 ) : (
                   <MessageBox variant="danger">Not Paid</MessageBox>
@@ -72,7 +72,7 @@ const OrderScreen = () => {
               <div className="card card-body">
                 <h2>Order Items</h2>
                 <ul>
-                  {detailedOrder.orderItems.map((item) => {
+                  {displayOrder.orderItems.map((item) => {
                     return (
                       <li key={item.product}>
                         <div className="row">
@@ -112,21 +112,21 @@ const OrderScreen = () => {
               <li>
                 <div className="row">
                   <div>Items</div>
-                  <div>${detailedOrder.itemsPrice.toFixed(2)}</div>
+                  <div>${displayOrder.itemsPrice.toFixed(2)}</div>
                 </div>
               </li>
 
               <li>
                 <div className="row">
                   <div>Shipping</div>
-                  <div>${detailedOrder.shippingPrice.toFixed(2)}</div>
+                  <div>${displayOrder.shippingPrice.toFixed(2)}</div>
                 </div>
               </li>
 
               <li>
                 <div className="row">
                   <div>Tax</div>
-                  <div>${detailedOrder.taxPrice.toFixed(2)}</div>
+                  <div>${displayOrder.taxPrice.toFixed(2)}</div>
                 </div>
               </li>
 
@@ -136,7 +136,7 @@ const OrderScreen = () => {
                     <strong>Order Total</strong>
                   </div>
                   <div>
-                    <strong>${detailedOrder.totalPrice.toFixed(2)}</strong>
+                    <strong>${displayOrder.totalPrice.toFixed(2)}</strong>
                   </div>
                 </div>
               </li>

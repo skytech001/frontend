@@ -5,8 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 import CheckOutSteps from "../components/CheckOutSteps";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
-import { cartEmpty } from "../features/addToCartSlice";
-import { createOrder, orderReset } from "../features/placeOrderSlice";
+// import { cartEmpty } from "../features/addToCartSlice";
+
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import axios from "axios";
+import { createNewOrder } from "../features/placeOrderSlice";
 
 const PlaceOrderScreen = () => {
   const dispatch = useDispatch();
@@ -14,10 +17,10 @@ const PlaceOrderScreen = () => {
   const { address } = useSelector((state) => state.shipping);
   const { paymentMethod } = useSelector((state) => state.payment);
   const { cartItems } = useSelector((state) => state.addToCart);
-  const { orderLoading, orderError, success, order } = useSelector(
+  const { orderLoading, orderError, success, thisOrder } = useSelector(
     (state) => state.order
   );
-
+  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const roundPrice = (num) => Number(num.toFixed(2)); //this line rounds up the numbers to 2 decemal places. "5.123" =>  5.12
   const itemsPrice = roundPrice(
     cartItems.reduce((acc, item) => acc + item.qty * item.price, 0)
@@ -27,31 +30,58 @@ const PlaceOrderScreen = () => {
   const taxPrice = roundPrice(0.15 * itemsPrice);
   const totalPrice = itemsPrice + shippingPrice + taxPrice;
 
-  const PlaceOrderHandler = () => {
-    dispatch(
-      createOrder({
-        orderItems: cartItems,
-        shippingAddress: address,
-        paymentMethod: paymentMethod,
-        itemsPrice: itemsPrice,
-        shippingPrice: shippingPrice,
-        taxPrice: taxPrice,
-        totalPrice: totalPrice,
-      })
-    );
+  const newOrder = {
+    orderItems: cartItems,
+    shippingAddress: address,
+    paymentMethod: paymentMethod,
+    itemsPrice: itemsPrice,
+    shippingPrice: shippingPrice,
+    taxPrice: taxPrice,
+    totalPrice: totalPrice,
   };
 
+  const createOrder = (data, actions) => {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: { value: totalPrice },
+          },
+        ],
+      })
+      .then((id) => id);
+  };
+
+  const onApprove = (data, actions) => {
+    return actions.order.capture().then((details) => {
+      dispatch(createNewOrder({ details, newOrder }));
+    });
+  };
+
+  const onError = () => {};
+
   useEffect(() => {
+    const loadPaypalScript = async () => {
+      const { data } = await axios.get("http://localhost:5000/keys/paypal");
+      paypalDispatch({
+        type: "resetOptions",
+        value: {
+          "client-id": data,
+          currency: "USD",
+        },
+      });
+      paypalDispatch({ type: "setLoadingStatus", value: "pending" });
+    };
+
+    loadPaypalScript();
     if (!paymentMethod) {
       navigate("/shipping");
     }
 
     if (success) {
-      navigate(`/order/${order.order._id}`);
-      dispatch(orderReset());
-      dispatch(cartEmpty());
+      navigate(`/order/${thisOrder._id}`);
     }
-  }, [dispatch, order, navigate, success, paymentMethod]);
+  }, [dispatch, paypalDispatch, thisOrder, navigate, success, paymentMethod]);
 
   return (
     <div>
@@ -153,14 +183,19 @@ const PlaceOrderScreen = () => {
                 </div>
               </li>
               <li>
-                <button
-                  type="button"
-                  className="primary block"
-                  onClick={PlaceOrderHandler}
-                  disabled={cartItems.length === 0}
-                >
-                  Place Order
-                </button>
+                <div>
+                  {isPending ? (
+                    <LoadingBox />
+                  ) : (
+                    <div>
+                      <PayPalButtons
+                        createOrder={createOrder}
+                        onApprove={onApprove}
+                        onError={onError}
+                      ></PayPalButtons>
+                    </div>
+                  )}
+                </div>
               </li>
               {orderLoading && <LoadingBox></LoadingBox>}
               {orderError && (

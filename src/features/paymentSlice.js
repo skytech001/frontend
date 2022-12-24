@@ -9,8 +9,11 @@ const paymentSlice = createSlice({
     savePaymentMethod: (state, { payload }) => {
       state.paymentMethod = payload;
     },
+    paymentReset: (state) => {
+      return (state = {});
+    },
   },
 });
 
 export default paymentSlice.reducer;
-export const { savePaymentMethod } = paymentSlice.actions;
+export const { savePaymentMethod, paymentReset } = paymentSlice.actions;

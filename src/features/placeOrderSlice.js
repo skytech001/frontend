@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const createOrder = createAsyncThunk(
-  "order/createOrder",
+export const createNewOrder = createAsyncThunk(
+  "order/createNewOrder",
   async (order, { getState }) => {
     const state = getState();
     const userInfo = state.signin.userInfo;
@@ -16,30 +16,35 @@ export const createOrder = createAsyncThunk(
   }
 );
 
+const initialState = {
+  orderLoading: false,
+  orderError: "",
+  success: false,
+  thisOrder: "",
+};
+
 const placeOrderSlice = createSlice({
   name: "order",
-  initialState: {
-    orderLoading: false,
-    orderError: false,
-    success: false,
-    order: [],
-  },
+  initialState: initialState,
   reducers: {
-    orderReset: (state) => {
-      return (state = {});
+    newOrderReset: (state) => {
+      state.orderLoading = false;
+      state.orderError = "";
+      state.success = false;
+      state.thisOrder = "";
     },
   },
   extraReducers(builder) {
     builder
-      .addCase(createOrder.pending, (state) => {
+      .addCase(createNewOrder.pending, (state) => {
         state.orderLoading = true;
       })
-      .addCase(createOrder.fulfilled, (state, action) => {
+      .addCase(createNewOrder.fulfilled, (state, action) => {
         state.orderLoading = false;
         state.success = true;
-        state.order = action.payload;
+        state.thisOrder = action.payload.order;
       })
-      .addCase(createOrder.rejected, (state, action) => {
+      .addCase(createNewOrder.rejected, (state, action) => {
         state.orderLoading = false;
         state.success = false;
         state.orderError = action.payload;
@@ -48,4 +53,4 @@ const placeOrderSlice = createSlice({
 });
 
 export default placeOrderSlice.reducer;
-export const { orderReset } = placeOrderSlice.actions;
+export const { newOrderReset } = placeOrderSlice.actions;

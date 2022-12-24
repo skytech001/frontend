@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
-import { userRegister } from "../features/registerSlice";
+import { userRegister } from "../features/signinSlice";
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
@@ -13,14 +13,15 @@ const RegisterScreen = () => {
   // const [loggedIn, set]
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { errorMessage, isRegistered, registerError, newuserLoading } =
-    useSelector((state) => state.register);
+  const { errorMessage, isSignedIn, signinError, userLoading } = useSelector(
+    (state) => state.signin
+  );
 
   useEffect(() => {
-    if (isRegistered) {
+    if (isSignedIn) {
       navigate("/");
     }
-  }, [isRegistered, navigate, dispatch]);
+  }, [isSignedIn, navigate, dispatch]);
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -41,8 +42,8 @@ const RegisterScreen = () => {
         <div>
           <h1>Create Your Account</h1>
         </div>
-        {newuserLoading && <LoadingBox />}
-        {registerError && (
+        {userLoading && <LoadingBox />}
+        {signinError && (
           <MessageBox variant="danger">{errorMessage}</MessageBox>
         )}
         <div>
