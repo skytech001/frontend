@@ -21,7 +21,7 @@ const ProfileScreen = () => {
     setName(userInfo.name);
     setEail(userInfo.email);
     dispatch(profileReset());
-  }, [dispatch, navigate, isSignedIn]);
+  }, [dispatch, navigate, isSignedIn, userInfo]);
 
   //  dispatch(userSignIn())
 

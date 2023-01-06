@@ -10,22 +10,19 @@ const ShippingAddressScreen = () => {
   const { cartItems } = useSelector((state) => state.addToCart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const fulladdress = localStorage.getItem("shippingAddress")
-    ? JSON.parse(localStorage.getItem("shippingAddress"))
-    : {};
 
-  const [fullName, setFullName] = useState(fulladdress.fullName);
-  const [address, setAddress] = useState(fulladdress.address);
-  const [city, setCity] = useState(fulladdress.city);
-  const [state, setState] = useState(fulladdress.state);
-  const [postalCode, setPostalCode] = useState(fulladdress.postalCode);
-  const [country, setCountry] = useState(fulladdress.country);
+  const [fullName, setFullName] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [country, setCountry] = useState("");
 
   useEffect(() => {
     if (cartItems.length === 0) {
       navigate("/");
     }
-  });
+  }, [cartItems, navigate]);
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -66,7 +63,6 @@ const ShippingAddressScreen = () => {
             type="text"
             id="address"
             placeholder="Enter Address"
-            value={address}
             onChange={(event) => setAddress(event.target.value)}
             required
           ></input>
@@ -78,7 +74,6 @@ const ShippingAddressScreen = () => {
             type="text"
             id="city"
             placeholder="Enter City"
-            value={city}
             onChange={(event) => setCity(event.target.value)}
             required
           ></input>
@@ -90,7 +85,6 @@ const ShippingAddressScreen = () => {
             type="text"
             id="state"
             placeholder="Enter State"
-            value={state}
             onChange={(event) => setState(event.target.value)}
             required
           ></input>
@@ -102,7 +96,6 @@ const ShippingAddressScreen = () => {
             type="text"
             id="postalCode "
             placeholder="Enter Postal Code"
-            value={postalCode}
             onChange={(event) => setPostalCode(event.target.value)}
             required
           ></input>
@@ -114,7 +107,6 @@ const ShippingAddressScreen = () => {
             type="text"
             id="country"
             placeholder="Enter Country"
-            value={country}
             onChange={(event) => setCountry(event.target.value)}
             required
           ></input>

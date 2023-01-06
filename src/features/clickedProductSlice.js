@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  clickedProd: [],
+  clickedProd: "",
   loadingClicked: false,
   clickedError: false,
   isWorking: false,
@@ -13,6 +13,7 @@ export const getClickedProduct = createAsyncThunk(
   async (id) => {
     try {
       const response = await axios.get(`http://localhost:5000/products/${id}`);
+
       return response.data;
     } catch (error) {
       return error.data;

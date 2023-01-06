@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
-import { myOrders, getThisOrder } from "../features/orderListSlice";
+import { myOrders } from "../features/orderListSlice";
 import { newOrderReset } from "../features/placeOrderSlice";
 
 const OrderHistoryScreen = () => {
@@ -14,11 +14,13 @@ const OrderHistoryScreen = () => {
   const { userOrders, loading, error } = useSelector(
     (state) => state.orderList
   );
-
+  if (!isSignedIn) {
+    navigate("/signin");
+  }
   useEffect(() => {
     dispatch(myOrders());
     dispatch(newOrderReset());
-  }, [dispatch, myOrders]);
+  }, [dispatch]);
 
   return (
     <div>
@@ -57,11 +59,9 @@ const OrderHistoryScreen = () => {
                       type="button"
                       className="small"
                       onClick={() => {
-                        const thisOrder = userOrders.filter((item) => {
+                        userOrders.filter((item) => {
                           return item._id === order._id;
                         });
-
-                        dispatch(getThisOrder(thisOrder));
                         navigate(`/order/${order._id}`);
                       }}
                     >

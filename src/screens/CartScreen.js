@@ -41,7 +41,7 @@ const CartScreen = () => {
                   <div className="row">
                     <div>
                       <img
-                        src={item.image}
+                        src={item.image[0]}
                         alt={item.name}
                         className="small"
                       ></img>

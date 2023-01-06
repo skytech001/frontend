@@ -13,6 +13,10 @@ import OrderScreen from "./screens/OrderScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import OrderHistoryScreen from "./screens/OrderHistoryScreen";
 import PrivateRoute from "./components/PrivateRoute";
+import AdminAuthRooute from "./components/AdminAuthRooute";
+import ListProductScreen from "./screens/ListProductScreen";
+import ProductEditScreen from "./screens/ProductEditScreen";
+import ListOrderScreen from "./screens/ListOrderScreen";
 
 function App() {
   const { cartItems } = useSelector((state) => state.addToCart);
@@ -74,7 +78,7 @@ function App() {
                     <Link to="/dashboard">Dashboard</Link>
                   </li>
                   <li>
-                    <Link to="/productlist">Products</Link>
+                    <Link to="/Listofproduct">Products</Link>
                   </li>
                   <li>
                     <Link to="/orderlist">Orders</Link>
@@ -91,7 +95,11 @@ function App() {
         <main>
           <Routes>
             <Route path="/cart" element={<CartScreen />}></Route>
-            <Route path="/product/:id" element={<ProductScreen />}></Route>
+            <Route
+              path="/product/:id"
+              element={<ProductScreen />}
+              exact
+            ></Route>
             <Route path="/signin" element={<SigninScreen />}></Route>
 
             <Route path="/register" element={<RegisterScreen />}></Route>
@@ -105,6 +113,17 @@ function App() {
               <Route
                 path="orderhistory"
                 element={<OrderHistoryScreen />}
+              ></Route>
+            </Route>
+            <Route element={<AdminAuthRooute user={userInfo} />}>
+              <Route
+                path="/Listofproduct"
+                element={<ListProductScreen />}
+              ></Route>
+              <Route path="/orderlist" element={<ListOrderScreen />}></Route>
+              <Route
+                path="/product/:id/edit"
+                element={<ProductEditScreen />}
               ></Route>
             </Route>
 

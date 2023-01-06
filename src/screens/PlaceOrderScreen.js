@@ -10,6 +10,7 @@ import MessageBox from "../components/MessageBox";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { createNewOrder } from "../features/placeOrderSlice";
+import { cartEmpty } from "../features/addToCartSlice";
 
 const PlaceOrderScreen = () => {
   const dispatch = useDispatch();
@@ -55,6 +56,7 @@ const PlaceOrderScreen = () => {
   const onApprove = (data, actions) => {
     return actions.order.capture().then((details) => {
       dispatch(createNewOrder({ details, newOrder }));
+      dispatch(cartEmpty());
     });
   };
 
@@ -120,7 +122,7 @@ const PlaceOrderScreen = () => {
                         <div className="row">
                           <div>
                             <img
-                              src={item.image}
+                              src={item.image[0]}
                               alt={item.name}
                               className="small"
                             ></img>
